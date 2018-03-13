@@ -66,7 +66,7 @@ func (p *Promise) reject(err error) {
 	p.sync.Broadcast()
 }
 
-func (p *Promise) await() interface{} {
+func (p *Promise) Await() interface{} {
 	if p.done {
 		return p.Value
 	}
@@ -81,7 +81,7 @@ func (p *Promise) await() interface{} {
 func (p *Promise) Then(then ResolveFunc) *Promise {
 
 	go func() {
-		p.await()
+		p.Await()
 		if p.Err == nil {
 			then(p.Value)
 		}
@@ -93,7 +93,7 @@ func (p *Promise) Then(then ResolveFunc) *Promise {
 func (p *Promise) Catch(catch RejectFunc) *Promise {
 
 	go func() {
-		p.await()
+		p.Await()
 		if p.Err != nil {
 			catch(p.Err)
 		}
